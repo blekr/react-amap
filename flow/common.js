@@ -55,6 +55,7 @@ declare type MapProps = {
   children: React.Node,
   events?: EventMap,
   plugins?: Object,
+  plugin?: string,
   loading: React.Node,
   center?: LngLat,
   zoom?: number,

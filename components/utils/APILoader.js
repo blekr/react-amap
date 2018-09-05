@@ -3,14 +3,15 @@ const DEFAULT_CONFIG = {
   hostAndPath: 'webapi.amap.com/maps',
   key: 'f97efc35164149d0c0f299e7a8adb3d2',
   callback: '__amap_init_callback',
-  useAMapUI: false
+  useAMapUI: false,
+  plugin: ''
 }
 
 let mainPromise = null
 let amapuiPromise = null
 let amapuiInited = false
 export default class APILoader {
-  constructor({ key, useAMapUI, version, protocol }) {
+  constructor({ key, useAMapUI, version, protocol, plugin }) {
     this.config = { ...DEFAULT_CONFIG, useAMapUI, protocol }
     if (typeof window !== 'undefined') {
       if (key) {
@@ -22,6 +23,9 @@ export default class APILoader {
     if (version) {
       this.config.v = version
     }
+    if (plugin) {
+      this.config.plugin = plugin;
+    }
     this.protocol = protocol || window.location.protocol
     if (this.protocol.indexOf(':') === -1) {
       this.protocol += ':'
@@ -29,7 +33,8 @@ export default class APILoader {
   }
 
   getScriptSrc(cfg) {
-    return `${this.protocol}//${cfg.hostAndPath}?v=${cfg.v}&key=${cfg.key}&callback=${cfg.callback}`
+    const plugin = cfg.plugin ? `&plugin=${cfg.plugin}` : '';
+    return `${this.protocol}//${cfg.hostAndPath}?v=${cfg.v}${plugin}&key=${cfg.key}&callback=${cfg.callback}`
   }
 
   buildScriptTag(src) {
